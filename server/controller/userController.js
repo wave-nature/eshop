@@ -52,3 +52,75 @@ export const getProfile = asyncHandler(async (req, res) => {
     user,
   });
 });
+// @desc update user prfile
+// @route PUT /api/users/profile
+// @access private
+export const updateProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save({ runValidatorsBeforSave: true });
+    const token = createToken(updatedUser._id);
+    res.status(200).json({
+      status: "success",
+      updatedUser,
+      token,
+    });
+  } else throw new Error("User not found");
+});
+
+export const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    status: "success",
+    results: users.length,
+    users,
+  });
+});
+
+export const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("No user found with this id");
+  }
+
+  res.status(204).json({
+    status: "success",
+  });
+});
+export const getUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("No user found with this id");
+  }
+  res.status(200).json({
+    status: "success",
+    user,
+  });
+});
+export const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("No user found with this id");
+  }
+
+  user.name = req.body.name || user.name;
+  user.email = req.body.email || user.email;
+  user.isAdmin = req.body.isAdmin;
+
+  const updatedUser = await user.save({ validateBeforeSave: false });
+  res.status(200).json({
+    status: "success",
+    updatedUser,
+  });
+});

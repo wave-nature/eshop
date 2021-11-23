@@ -8,16 +8,54 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import {
   productListReducer,
   productDetailReducer,
+  productDeleteReducer,
+  productCreateReducer,
+  productUpdateReducer,
+  productReviewReducer,
+  productTopRatedReducer,
 } from "../reducers/productReducers";
 
 import { cartReducer } from "../reducers/cartReducer";
-import { userLoginReducer, userRegisterReducer } from "../reducers/userReducer";
+import {
+  userLoginReducer,
+  userRegisterReducer,
+  userDetailsReducer,
+  userUpdateReducer,
+  userListReducer,
+  userDeleteReducer,
+  userUpdateByAdminReducer,
+} from "../reducers/userReducer";
+import {
+  orderCreateReducer,
+  orderDetailReducer,
+  orderPaidReducer,
+  orderBelongsToMeReducer,
+  orderListReducer,
+  orderDeliverReducer,
+} from "../reducers/orderReducer";
+
 const reducer = combineReducers({
   productList: productListReducer,
   productDetail: productDetailReducer,
+  productDelete: productDeleteReducer,
+  productCreate: productCreateReducer,
+  productUpdate: productUpdateReducer,
+  productReview: productReviewReducer,
+  productTopRated: productTopRatedReducer,
   cart: cartReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
+  userDetails: userDetailsReducer,
+  userUpdate: userUpdateReducer,
+  userList: userListReducer,
+  userDelete: userDeleteReducer,
+  userUpdateByAdmin: userUpdateByAdminReducer,
+  orderCreate: orderCreateReducer,
+  orderDetail: orderDetailReducer,
+  orderPaid: orderPaidReducer,
+  orderBelongsToMe: orderBelongsToMeReducer,
+  orderList: orderListReducer,
+  orderDeliver: orderDeliverReducer,
 });
 
 const cartItemsFromLocalStorage = localStorage.getItem("cartItems")
@@ -27,8 +65,14 @@ const cartItemsFromLocalStorage = localStorage.getItem("cartItems")
 const userFromLocalStorage = localStorage.getItem("user")
   ? JSON.parse(localStorage.getItem("user"))
   : null;
+const shippingAddressFromLocalStorage = localStorage.getItem("shippingAddress")
+  ? JSON.parse(localStorage.getItem("shippingAddress"))
+  : {};
 const initialState = {
-  cart: { cartItems: cartItemsFromLocalStorage },
+  cart: {
+    cartItems: cartItemsFromLocalStorage,
+    shippingAddress: shippingAddressFromLocalStorage,
+  },
   userLogin: { user: userFromLocalStorage }, //userLogin is the name of state used in reducer in store and inside that userLogin state we have user
 };
 
